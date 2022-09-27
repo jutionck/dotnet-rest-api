@@ -1,0 +1,13 @@
+./idea/
+.idea/.idea.dotnet-rest-api/.idea
+dotnet-rest-api/bin/
+enigma-core/bin/
+enigma-data/bin/
+enigma-service/bin/
+dotnet-rest-api/obj/
+enigma-core/obj/
+enigma-data/obj/
+enigma-service/obj/
+dotnet-rest-api/packages/
+dotnet-rest-api/riderModule.iml
+dotnet-rest-api//_ReSharper.Caches/
