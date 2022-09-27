@@ -4,8 +4,8 @@ namespace enigma_core.services;
 
 public interface IStudentService
 {
-    void Create(StudentDto student);
-    void Update(StudentDto student);
+    (bool, string) Create(StudentDto student);
+    (bool, string) Update(StudentDto student);
     void Delete(int studentId);
     StudentDto GetById(int studentId);
     List<StudentDto> List();

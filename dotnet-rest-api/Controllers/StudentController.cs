@@ -1,5 +1,6 @@
 using enigma_core.models;
 using enigma_core.services;
+using enigma_core.utils;
 using Microsoft.AspNetCore.Mvc;
 
 namespace dotnet_rest_api.Controllers;
@@ -19,9 +20,19 @@ public class StudentController : ControllerBase
 
     [HttpGet(Name = "GetAllStudent")]
     [Produces("application/json")]
-    public List<StudentDto> GetAllStudent()
+    public IActionResult GetAllStudent()
     {
-        return _studentService.List();;
+        try
+        {
+            Console.WriteLine("GetAllStudent.success");
+            var students = _studentService.List();
+            return Requests.Response(this, new ApiStatus(200), students, "");
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine("GetAllStudent.error");
+            return Requests.Response(this, new ApiStatus(500), new StudentDto(), e.Message);
+        }
     }
     
     [HttpPost(Name = "CreateStudent")]

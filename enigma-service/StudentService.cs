@@ -18,18 +18,40 @@ public class StudentService : IStudentService
         _mapper = mapper;
     }
 
-    public void Create(StudentDto student)
+    public (bool, string) Create(StudentDto student)
     {
-        var newStudent = _mapper.Map<Student>(student);
-        _configContext.Students.Add(newStudent);
-        _configContext.SaveChanges();
+        try
+        {
+            _configContext.Database.BeginTransaction();
+            var newStudent = _mapper.Map<Student>(student);
+            _configContext.Students.Add(newStudent);
+            _configContext.SaveChanges();
+            _configContext.Database.CommitTransaction();
+            return (true, "Success");
+        }
+        catch (Exception e)
+        {
+            _configContext.Database.RollbackTransaction();
+            return (false, e.Message);
+        }
     }
 
-    public void Update(StudentDto student)
+    public (bool, string) Update(StudentDto student)
     {
-        var updateStudent = _mapper.Map<Student>(student);
-        _configContext.Students.Update(updateStudent);
-        _configContext.SaveChanges();
+        try
+        {
+            _configContext.Database.BeginTransaction();
+            var updateStudent = _mapper.Map<Student>(student);
+            _configContext.Students.Update(updateStudent);
+            _configContext.SaveChanges();
+            _configContext.Database.CommitTransaction();
+            return (true, "Success");
+        }
+        catch (Exception e)
+        {
+            _configContext.Database.RollbackTransaction();
+            return (false, e.Message);
+        }
     }
 
     public void Delete(int studentId)
@@ -50,7 +72,6 @@ public class StudentService : IStudentService
     public List<StudentDto> List()
     {
         var students = _configContext.Students.ToList();
-        var studentDto = _mapper.Map<List<StudentDto>>(students);
-        return studentDto;
+        return _mapper.Map<List<StudentDto>>(students);
     }
 }
