@@ -1,6 +1,7 @@
 using enigma_core.models;
 using enigma_core.services;
 using enigma_core.utils;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace dotnet_rest_api.Controllers;
@@ -20,6 +21,7 @@ public class StudentController : ControllerBase
 
     [HttpGet(Name = "GetAllStudent")]
     [Produces("application/json")]
+    [Authorize]
     public IActionResult GetAllStudent()
     {
         try
@@ -36,18 +38,21 @@ public class StudentController : ControllerBase
     }
     
     [HttpPost(Name = "CreateStudent")]
+    [Authorize]
     public void CreateStudent([FromBody] StudentDto payload)
     {
         _studentService.Create(payload);;
     }
     
     [HttpPut(Name = "UpdateStudent")]
+    [Authorize]
     public void UpdateStudent([FromBody] StudentDto payload)
     {
         _studentService.Update(payload);;
     }
     
     [HttpDelete(Name = "DeleteStudent")]
+    [Authorize]
     public void DeleteStudent(int studentId)
     {
         _studentService.Delete(studentId);;
