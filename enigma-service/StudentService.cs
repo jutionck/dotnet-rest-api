@@ -1,4 +1,5 @@
-﻿using enigma_core.models;
+﻿using AutoMapper;
+using enigma_core.models;
 using enigma_core.services;
 using enigma_data;
 using enigma_data.database;
@@ -9,36 +10,24 @@ public class StudentService : IStudentService
 {
     // Dependency Injection
     private readonly ConfigContext _configContext;
+    private readonly IMapper _mapper;
 
-    public StudentService(ConfigContext configContext)
+    public StudentService(ConfigContext configContext, IMapper mapper)
     {
         _configContext = configContext;
+        _mapper = mapper;
     }
-    
 
     public void Create(StudentDto student)
     {
-        var newStudent = new Student()
-        {
-            Name = student.Name,
-            Address = student.Address,
-            Country = student.Country
-        };
-
+        var newStudent = _mapper.Map<Student>(student);
         _configContext.Students.Add(newStudent);
         _configContext.SaveChanges();
     }
 
     public void Update(StudentDto student)
     {
-        var updateStudent = new Student()
-        {
-            StudentId = student.StudentId,
-            Name = student.Name,
-            Address = student.Address,
-            Country = student.Country
-        };
-
+        var updateStudent = _mapper.Map<Student>(student);
         _configContext.Students.Update(updateStudent);
         _configContext.SaveChanges();
     }
@@ -61,18 +50,7 @@ public class StudentService : IStudentService
     public List<StudentDto> List()
     {
         var students = _configContext.Students.ToList();
-        var studentDto = new List<StudentDto>();
-        foreach (var student in students)
-        {
-            var std = new StudentDto();
-            std.StudentId = student.StudentId;
-            std.Name = student.Name;
-            std.Address = student.Address;
-            std.Country = student.Country;
-            
-            studentDto.Add(std);
-        }
-
+        var studentDto = _mapper.Map<List<StudentDto>>(students);
         return studentDto;
     }
 }
